@@ -46,13 +46,13 @@ console.log("Hello!");
 // }, 1000);
 
 // function to run after 1s
-function timeout() {
+function timeout1() {
   console.log("I will run after 1s");
 }
 
 // call setTimeout function with run function and 1000ms as arguments
 // setTimeout(callback, time in ms);
-setTimeout(timeout, 1000);
+setTimeout(timeout1, 1000);
 
 console.log("Welcome to Loupe!");
 
