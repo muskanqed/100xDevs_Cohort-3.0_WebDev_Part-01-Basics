@@ -60,4 +60,22 @@ app.post("/signin", (req, res) => {
     }
 });
 
+app.get("/me", (req, res) => {
+    const token = req.headers.token;
+
+    const user = users.find(u => u.token === token)
+
+    if (user) {
+        res.json({
+            username: user.username,
+            password: user.password
+        })
+    }
+    else {
+        res.json({
+            msg: "Invaild token"
+        })
+    }
+})
+
 app.listen(3000);
