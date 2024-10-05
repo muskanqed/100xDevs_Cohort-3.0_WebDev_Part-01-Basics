@@ -1,11 +1,32 @@
 const express = require("express");
 const jwt = require('jsonwebtoken');
+const path = require('path');
 
 const app = express();
 const JWT_SECRET = "muskanrandomtoken";
 const users = [];
 
+function auth(req, res, next) {
+    const token = req.headers.token;
+    const decodeInfo = jwt.verify(token, JWT_SECRET);
+
+    const username = decodeInfo.username;
+    if (username) {
+        req.username = username;
+        next();
+    }
+    else {
+        res.json({
+            message: "You are not logged in"
+        })
+    }
+}
+
 app.use(express.json());
+
+app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/Frontend/index.html");
+})
 
 app.post("/signup", (req, res) => {
     const username = req.body.username;
@@ -40,6 +61,9 @@ app.post("/signin", (req, res) => {
             username: username
         }, JWT_SECRET)
 
+        // We can also send jwt in headers
+        // res.header("jwt",token);
+
         res.json({
             token
         })
@@ -47,12 +71,8 @@ app.post("/signin", (req, res) => {
 
 })
 
-app.get("/me",(req,res)=>{
-    const token = req.headers.token;
-    const decodeInfo = jwt.verify(token,JWT_SECRET);
-
-    const username = decodeInfo.username;
-    const user = users.find(u => u.username === username);
+app.get("/me", auth, (req, res) => {
+    const user = users.find(u => u.username === req.username);
 
     if (user) {
         res.json({
