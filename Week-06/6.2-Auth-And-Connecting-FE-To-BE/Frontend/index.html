@@ -41,6 +41,10 @@
             document.getElementById("information").innerHTML = (`Username: ${response.data.username} and password: ${response.data.password}`)
         }
         getUserInfo();
+
+        function logout() {
+            localStorage.removeItem("token")
+        }
     </script>
 </head>
 
