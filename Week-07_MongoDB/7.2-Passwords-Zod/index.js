@@ -18,12 +18,26 @@ function initServer() {
   connectToDb();
 
   app.post("/signup", async function (req, res) {
-    const email = req.body.email;
-    const password = req.body.password;
-    const name = req.body.name;
-
-
     try {
+      const requestBody = zod.object({
+        email: zod.string().email(),
+        password: zod.string().min(6),
+        name: zod.string().min(3)
+      });
+
+
+      const safeParsingReq = requestBody.safeParse(req.body);
+
+      if (!safeParsingReq.success) {
+        return res.status(400).json({
+          message: "Incorrect Format"
+        });
+      }
+
+      const email = req.body.email;
+      const password = req.body.password;
+      const name = req.body.name;
+
       const hasedPassword = await bcrypt.hash(password, 5);
 
       await UserModel.create({
@@ -32,13 +46,14 @@ function initServer() {
         name: name,
       });
 
-      res.json({
+      return res.json({
         message: "You are signed up",
       });
     } catch (e) {
-      res.json("Already taken");
+      return res.status(400).json({
+        message: "Already taken",
+      });
     }
-
   });
 
   app.post("/signin", async function (req, res) {
