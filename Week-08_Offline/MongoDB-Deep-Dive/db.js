@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { string } = require("zod");
 
 mongoose.connect("")
 
@@ -11,12 +12,17 @@ const adminSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     username: String,
     email: { type: String, unique: true },
-    password: String
+    password: String,
+    purchasedCourses: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'course'
+    }]
 });
 
 const courseSchema = mongoose.Schema({
     title: String,
     description: String,
+    imagelink: string,
     price: Number
 })
 
