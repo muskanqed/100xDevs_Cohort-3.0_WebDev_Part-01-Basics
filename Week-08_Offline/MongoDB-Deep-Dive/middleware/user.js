@@ -11,7 +11,7 @@ function userMiddleware(req, res, next) {
         username,
         password
     })
-        .then(() => {
+        .then((value) => {
             if (value) {
                 next()
             }
