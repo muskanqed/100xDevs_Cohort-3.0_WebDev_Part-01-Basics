@@ -4,22 +4,21 @@ const { adminModel } = require("../db");
 
 
 function adminMiddleware(req, res, next) {
-    const { username, password } = req.body;
+    const { email, password } = req.headers;
 
     adminModel.findOne({
-        username,
+        email,
         password
+    }).then((value) => {
+        if (value) {
+            next()
+        }
+        else {
+            res.status(404).json({
+                message: "Admin does not exists"
+            })
+        }
     })
-        .then(() => {
-            if (value) {
-                next()
-            }
-            else {
-                res.status(404).json({
-                    message: "Admin does not exists"
-                })
-            }
-        })
 }
 
 module.exports = {
