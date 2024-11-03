@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { string } = require("zod");
 
-mongoose.connect("")
+mongoose.connect("mongodb://localhost:27017/new")
 
 const adminSchema = mongoose.Schema({
     username: String,
@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
 const courseSchema = mongoose.Schema({
     title: String,
     description: String,
-    imagelink: string,
+    imagelink: String,
     price: Number
 })
 
