@@ -1,3 +1,3 @@
-# **Week 08_Offline - MongoDB Deep Dive**
+# **Week 09_React - 9.1 | React Basics**
 
-## [Notes / Slides Link](https://100x-b-mcdn.akamai.net.in/cohort-2-slides/Week_4.3.pdf)
+## [Notes / Slides Link](https://www.canva.com/design/DAGStTo7_1Y/H-uoNlkdJ2X4P3LbOME45Q/edit)
