@@ -13,7 +13,12 @@ function App() {
 
   return (
     <>
+      {/* The below logic doesnt unmounts it just hides it so the clock continues that is the clock below */}
+      {/* <div style={{ visibility: counterVisible ? "visible" : "hidden" }}>
+        <Counter></Counter>
+      </div> */}
       <div>
+        {/* This logic surely unmounts it */}
         {counterVisible && <Counter></Counter>}
       </div>
     </>
@@ -29,13 +34,20 @@ function Counter() {
 
 
   // useEffect hooks ensures that our element is hooked once when it mounts and does change even if re-rendering happens
-
+  // We wanted to guard our setInterval using useEffect
   useEffect(() => {
-    setInterval(() => {
+    const clock = setInterval(() => {
+      console.log("Mounted once");
       setCount(count => count + 1)
     }, 1000)
-    console.log("Mounted once");
 
+    console.log("Only Once");
+
+
+    return function () {
+      console.log("Unmounts");
+      clearInterval(clock);
+    }
   }, [])
 
   // function increaseCount() {
