@@ -36,7 +36,7 @@ function Counter(props) {
         }
     }, [])
 
-    // useEffect is more generic it s not only used for react lifecycle
+    // useEffect is more generic its not only used for react lifecycle
     useEffect(function () {
         console.log("when state changes run this");
 
