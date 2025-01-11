@@ -1,6 +1,13 @@
-import { useEffect } from 'react'
-import './App.css'
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom"
+import { useEffect } from "react";
+import "./App.css";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  Outlet,
+} from "react-router-dom";
 
 function App() {
   return (
@@ -10,21 +17,30 @@ function App() {
     | <a href="/class-11">Class-11</a>
     | <a href="/class-12">Class-12</a> */}
       <BrowserRouter>
-        <Link to="/">Allen</Link>
-        <br />
-        <Link to="/class-11">Class-11</Link>
-        <br />
-        <Link to="/class-12">Class-12</Link>
-
         <Routes>
-          <Route path='/' element={<LandingPage />} />
-          <Route path='/class-11' element={<Class11Program />} />
-          <Route path='/class-12' element={<Class12Program />} />
-          <Route path="*" element={<ErrorPage />} />
+          <Route path="/" element={<Layout />}>
+            <Route index element={<LandingPage />} />
+            <Route path="/class-11" element={<Class11Program />} />
+            <Route path="/class-12" element={<Class12Program />} />
+            <Route path="*" element={<ErrorPage />} />
+          </Route>
         </Routes>
       </BrowserRouter>
     </>
-  )
+  );
+}
+
+function Layout() {
+  return (
+    <div style={{ height: "100vh" }}>
+      <Link to="/">Allen</Link>|<Link to="/class-11">Class-11</Link>|
+      <Link to="/class-12">Class-12</Link>
+      <div style={{ height: "90vh" }}>
+        <Outlet />
+      </div>
+      footer
+    </div>
+  );
 }
 
 function ErrorPage() {
@@ -32,19 +48,15 @@ function ErrorPage() {
     <div>
       <h1>Sorry page not found</h1>
     </div>
-  )
+  );
 }
 
 function LandingPage() {
-  return <div>
-    Welcom Allen
-  </div>
+  return <div>Welcom Allen</div>;
 }
 
 function Class11Program() {
-  return <div>
-    Class-11 Program
-  </div>
+  return <div>Class-11 Program</div>;
 }
 
 function Class12Program() {
@@ -52,13 +64,11 @@ function Class12Program() {
 
   useEffect(() => {
     setInterval(() => {
-      navigate("/")
-    }, 5000)
-  }, [])
+      navigate("/");
+    }, 5000);
+  }, []);
 
-  return <div>
-    Class-12 Program
-  </div>
+  return <div>Class-12 Program</div>;
 }
 
-export default App
+export default App;
