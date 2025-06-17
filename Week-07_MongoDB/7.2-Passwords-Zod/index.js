@@ -6,10 +6,9 @@ const zod = require("zod");
 
 const { UserModel, TodoModel } = require("./db");
 const { connectToDb } = require("./dbconnect");
-const { auth } = require("./auth.js")
+const { auth } = require("./auth.js");
 
 const JWT_SECRET = "muskan123";
-
 
 function initServer() {
   const app = express();
@@ -22,15 +21,19 @@ function initServer() {
       const requestBody = zod.object({
         email: zod.string().email(),
         password: zod.string().min(6),
-        name: zod.string().min(3)
+        name: zod.string().min(3),
       });
-
 
       const safeParsingReq = requestBody.safeParse(req.body);
 
+      // The difference between parse and safeParse is safeParse return 3 thing that is success,data and error in an object and also return the error without crashing the server
+      // parse only returns the error you need to put it in try and catch block else the server will fail
+      // Use parse if you want an exception to be thrown when validation fails.
+      // Use safeParse if you want structured validation errors without crashing the app.
+
       if (!safeParsingReq.success) {
         return res.status(400).json({
-          message: "Incorrect Format"
+          message: "Incorrect Format",
         });
       }
 
@@ -66,24 +69,25 @@ function initServer() {
 
     if (!response) {
       res.json({
-        message: "User not found"
-      })
+        message: "User not found",
+      });
       return;
     }
 
     const passwordMatch = await bcrypt.compare(password, response.password);
 
-
     if (passwordMatch) {
-      const token = jwt.sign({
-        id: response._id,
-      }, JWT_SECRET);
+      const token = jwt.sign(
+        {
+          id: response._id,
+        },
+        JWT_SECRET
+      );
 
       res.json({
         token,
       });
-    }
-    else {
+    } else {
       res.status(403).json({
         message: "Incorrect creds",
       });
@@ -91,47 +95,39 @@ function initServer() {
   });
 
   app.post("/todo", auth, (req, res) => {
-    const userId = req.userId
-    const title = req.body.title
-    const done = req.body.done
+    const userId = req.userId;
+    const title = req.body.title;
+    const done = req.body.done;
 
     TodoModel.create({
       userId,
       title,
-      done
-    })
+      done,
+    });
 
     res.json({
       message: "Todo created successfully",
-      userId
-    })
-
-
-
+      userId,
+    });
   });
 
   app.get("/todos", auth, async (req, res) => {
-
-    const userId = req.userId
+    const userId = req.userId;
 
     const todos = await TodoModel.find({
-      userId
+      userId,
     });
 
     if (userId === todos.userId) {
       res.json({
-        todos
-      })
-    }
-    else {
+        todos,
+      });
+    } else {
       res.json({
-        message: "Please create one todo"
-      })
+        message: "Please create one todo",
+      });
     }
-
   });
-
-
 
   app.listen(3000, () => {
     console.log("server running on port 3000");
